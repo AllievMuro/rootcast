@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rootcast — Proof-of-Attendance Communities on Solana</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Red+Hat+Text:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#FAF9F6;--surface:#FFFFFF;--primary:#0D9488;--secondary:#14B8A6;--text:#1C1917;--muted:#78716C;--border:3px solid #1C1917}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Red Hat Text',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden}
+h1,h2,h3,h4{font-family:'Cabinet Grotesk',sans-serif;line-height:1.1}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:64px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo svg{width:32px;height:32px}
+.nav-wordmark{font-family:'Cabinet Grotesk',sans-serif;font-weight:900;font-size:1.25rem;letter-spacing:-0.5px}
+.nav-links{display:flex;gap:2rem;font-size:.9rem;font-weight:500}
+.nav-links a{color:var(--muted);transition:color .15s}
+.nav-links a:hover{color:var(--primary)}
+.btn-primary{background:var(--primary);color:#fff;border:3px solid var(--text);padding:.5rem 1.25rem;font-family:'Cabinet Grotesk',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;letter-spacing:.3px;transition:background .15s,transform .1s}
+.btn-primary:hover{background:#0a7c72;transform:translate(-2px,-2px)}
+.btn-outline{background:transparent;color:var(--text);border:var(--border);padding:.5rem 1.25rem;font-family:'Cabinet Grotesk',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;letter-spacing:.3px;transition:background .15s,transform .1s}
+.btn-outline:hover{background:var(--text);color:var(--bg);transform:translate(-2px,-2px)}
+
+/* HERO */
+#hero{min-height:92vh;display:grid;grid-template-columns:1fr 1fr;border-bottom:var(--border)}
+.hero-left{padding:6% 5% 6% 7%;display:flex;flex-direction:column;justify-content:center;border-right:var(--border)}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;border:2px solid var(--primary);color:var(--primary);font-size:.8rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:.35rem .75rem;margin-bottom:1.5rem;width:fit-content}
+.hero-eyebrow::before{content:'◆';font-size:.6rem}
+.hero-h1{font-size:clamp(2.8rem,5vw,4.5rem);font-weight:900;letter-spacing:-2px;line-height:1;margin-bottom:1.5rem}
+.hero-h1 span{color:var(--primary)}
+.hero-sub{font-size:1.1rem;color:var(--muted);max-width:480px;margin-bottom:2.5rem;line-height:1.7}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap}
+.hero-right{padding:5%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--surface)}
+.hero-visual{width:100%;max-width:420px;position:relative}
+.hero-logo-big svg{width:100%;max-width:320px;display:block;margin:0 auto 2rem}
+.score-card{border:var(--border);background:var(--bg);padding:1.25rem 1.5rem;margin-bottom:1rem;position:relative}
+.score-card:nth-child(2){margin-left:2rem}
+.score-card:nth-child(3){margin-left:1rem}
+.score-label{font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem}
+.score-val{font-family:'Cabinet Grotesk',sans-serif;font-size:1.8rem;font-weight:900;color:var(--primary)}
+.score-sub{font-size:.8rem;color:var(--muted)}
+.corner-tag{position:absolute;top:-1px;right:-1px;background:var(--primary);color:#fff;font-size:.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:.2rem .5rem}
+
+/* SECTION COMMON */
+section{padding:5rem 7%}
+.section-label{font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--primary);margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+.section-label::before{content:'';display:block;width:24px;height:2px;background:var(--primary)}
+.section-h2{font-size:clamp(2rem,4vw,3.2rem);font-weight:900;letter-spacing:-1.5px;margin-bottom:1.5rem}
+.section-h2 span{color:var(--primary)}
+
+/* PROBLEM */
+#problem{background:var(--text);color:var(--bg);border-bottom:var(--border)}
+#problem .section-label{color:var(--secondary)}
+#problem .section-label::before{background:var(--secondary)}
+#problem .section-h2{color:#fff}
+#problem .section-h2 span{color:var(--secondary)}
+.problem-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:4rem;align-items:start}
+.problem-text p{color:#c4bcb6;line-height:1.8;margin-bottom:1.25rem;font-size:1.05rem}
+.problem-callouts{display:flex;flex-direction:column;gap:1rem}
+.problem-callout{border:2px solid #3a3330;padding:1.25rem;position:relative}
+.problem-callout::before{content:attr(data-num);position:absolute;top:-12px;left:12px;background:var(--secondary);color:var(--text);font-family:'Cabinet Grotesk',sans-serif;font-weight:900;font-size:.75rem;padding:.1rem .5rem;letter-spacing:1px}
+.problem-callout h4{font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem}
+.problem-callout p{font-size:.875rem;color:#a09890;line-height:1.6}
+
+/* SOLUTION */
+#solution{background:var(--bg);border-bottom:var(--border)}
+.solution-inner{display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;align-items:start}
+.solution-text p{color:var(--muted);line-height:1.8;margin-bottom:1.25rem;font-size:1.05rem}
+.solution-diagram{border:var(--border);background:var(--surface);padding:2rem}
+.sol-step{display:flex;gap:1rem;align-items:flex-start;padding:1rem 0;border-bottom:2px solid #f0ede9}
+.sol-step:last-child{border-bottom:none}
+.sol-icon{width:40px;height:40px;min-width:40px;border:2px solid var(--text);background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#fff;font-family:'Cabinet Grotesk',sans-serif;font-weight:900}
+.sol-info h4{font-family:'Cabinet Grotesk',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:.25rem}
+.sol-info p{font-size:.83rem;color:var(--muted);line-height:1.5}
+
+/* FEATURES */
+#features{background:var(--surface);border-bottom:var(--border)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:var(--border);border-left:var(--border)}
+.feat-card{border-right:var(--border);border-bottom:var(--border);padding:2rem 1.75rem;transition:background .15s}
+.feat-card:hover{background:var(--primary)}
+.feat-card:hover .feat-title,.feat-card:hover .feat-desc,.feat-card:hover .feat-icon{color:#fff}
+.feat-icon{font-size:2rem;margin-bottom:1rem;display:block}
+.feat-title{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:1.15rem;margin-bottom:.5rem}
+.feat-desc{font-size:.875rem;color:var(--muted);line-height:1.6}
+.feat-card:hover .feat-desc{color:rgba(255,255,255,.8)}
+
+/* HOW IT WORKS */
+#how-it-works{background:var(--bg);border-bottom:var(--border)}
+.hiw-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:var(--border);margin-top:2.5rem}
+.hiw-step{padding:2.5rem 2rem;border-right:var(--border);border-bottom:var(--border);position:relative}
+.hiw-step:nth-child(2n){border-right:none}
+.hiw-step:nth-child(3),.hiw-step:nth-child(4){border-bottom:none}
+.hiw-num{font-family:'Cabinet Grotesk',sans-serif;font-weight:900;font-size:4rem;color:#f0ede9;line-height:1;position:absolute;top:1rem;right:1.5rem}
+.hiw-step h3{font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:1.3rem;margin-bottom:.75rem;position:relative;z-index:1}
+.hiw-step p{font-size:.9rem;color:var(--muted);line-height:1.7;position:relative;z-index:1}
+.hiw-tag{display:inline-block;background:var(--primary);color:#fff;font-size:.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:.2rem .6rem;margin-bottom:.75rem}
+
+/* METRICS */
+#metrics{background:var(--text);color:#fff;border-bottom:var(--border)}
+#metrics .section-label{color:var(--secondary)}
+#metrics .section-label::before{background:var(--secondary)}
+#metrics .section-h2{color:#fff}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:2px solid #3a3330;margin-top:2.5rem}
+.metric-card{padding:2.5rem 2rem;border-right:2px solid #3a3330;text-align:left}
+.metric-card:last-child{border-right:none}
+.metric-val{font-family:'Cabinet Grotesk',sans-serif;font-size:3rem;font-weight:900;color:var(--secondary);line-height:1;margin-bottom:.35rem}
+.metric-label{font-size:.85rem;color:#a09890;line-height:1.4}
+.metric-unit{font-size:1.2rem;color:var(--secondary);font-family:'Cabinet Grotesk',sans-serif;font-weight:900}
+
+/* TECH */
+#tech{background:var(--bg);border-bottom:var(--border)}
+.tech-pills{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:2rem}
+.tech-pill{border:var(--border);background:var(--surface);padding:.5rem 1.1rem;font-size:.85rem;font-weight:600;font-family:'Cabinet Grotesk',sans-serif;letter-spacing:.3px;display:flex;align-items:center;gap:.5rem;transition:background .15s,color .15s}
+.tech-pill:hover{background:var(--text);color:#fff}
+.tech-pill span{color:var(--primary);font-size:1rem}
+.tech-note{margin-top:2rem;color:var(--muted);font-size:.9rem;max-width:600px;line-height:1.7}
+
+/* CTA */
+#cta{background:var(--primary);border-bottom:var(--border)}
+.cta-inner{display:grid;grid-template-columns:1.2fr 1fr;gap:4rem;align-items:center}
+#cta .section-h2{color:#fff;font-size:clamp(2rem,4vw,3rem)}
+#cta p{color:rgba(255,255,255,.8);font-size:1.05rem;margin-top:1rem;line-height:1.7}
+.email-form{display:flex;flex-direction:column;gap:1rem}
+.email-form input{border:3px solid #fff;background:rgba(255,255,255,.15);color:#fff;padding:.85rem 1.25rem;font-family:'Red Hat Text',sans-serif;font-size:1rem;outline:none}
+.email-form input::placeholder{color:rgba(255,255,255,.6)}
+.btn-white{background:#fff;color:var(--primary);border:3px solid #fff;padding:.85rem 1.5rem;font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:1rem;cursor:pointer;letter-spacing:.3px;transition:background .15s,color .15s,transform .1s}
+.btn-white:hover{background:var(--text);color:#fff;border-color:var(--text);transform:translate(-2px,-2px)}
+.email-note{font-size:.8rem;color:rgba(255,255,255,.6)}
+
+/* FOOTER */
+footer{background:var(--text);color:#a09890;padding:2rem 7%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+footer span{font-size:.875rem}
+.social-links{display:flex;gap:1rem}
+.social-link{width:36px;height:36px;border:2px solid #3a3330;display:flex;align-items:center;justify-content:center;font-size:.9rem;color:#a09890;transition:border-color .15s,color .15s}
+.social-link:hover{border-color:var(--secondary);color:var(--secondary)}
+
+/* FADE IN */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+.fade-in.visible{opacity:1;transform:none}
+
+@media(max-width:900px){
+  #hero{grid-template-columns:1fr}
+  .hero-right{display:none}
+  .problem-grid,.solution-inner,.cta-inner{grid-template-columns:1fr}
+  .features-grid{grid-template-columns:1fr 1fr}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  .hiw-grid{grid-template-columns:1fr}
+  .hiw-step{border-right:none;border-bottom:var(--border)}
+  .hiw-step:last-child{border-bottom:none}
+  .nav-links{display:none}
+}
+@media(max-width:600px){
+  .features-grid{grid-template-columns:1fr}
+  .metrics-grid{grid-template-columns:1fr 1fr}
+  nav{padding:0 4%}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="32" height="32"><defs><linearGradient id="rc-text-grad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#0D9488"/><stop offset="100%" stop-color="#14B8A6"/></linearGradient></defs><rect width="512" height="512" rx="96" fill="#FAF9F6"/><text x="256" y="278" font-family="'Inter','Helvetica Neue','Arial Black',sans-serif" font-weight="800" font-size="72" letter-spacing="-4" text-anchor="middle" fill="#1C1917">Rootcast</text><rect x="92" y="293" width="328" height="5" rx="2.5" fill="url(#rc-text-grad)"/><circle cx="191" cy="225" r="5" fill="#14B8A6"/><text x="256" y="340" font-family="'JetBrains Mono','Fira Mono','Courier New',monospace" font-weight="400" font-size="13" letter-spacing="1.5" text-anchor="middle" fill="#0D9488" opacity="0.85">proof-of-attendance</text></svg>
+    <span class="nav-wordmark">Rootcast</span>
+  </div>
+  <div class="nav-links">
+    <a href="#problem">Problem</a>
+    <a href="#solution">Solution</a>
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#metrics">Metrics</a>
+  </div>
+  <a href="#cta" class="btn-primary">Join Beta</a>
+</nav>
+
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Solana · Proof of Attendance</div>
+    <h1 class="hero-h1">Showing up<br>is how you<br><span>govern.</span></h1>
+    <p class="hero-sub">Rootcast turns on-chain attendance into compounding governance power. Every Space you join, every bounty you complete, every member who vouches for you — permanently recorded on Solana, transparently shaping how your community makes decisions.</p>
+    <div class="hero-ctas">
+      <a href="#cta" class="btn-primary">Request Beta Access</a>
+      <a href="#solution" class="btn-outline">See How It Works</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="hero-logo-big">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="rc-g2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#0D9488"/><stop offset="100%" stop-color="#14B8A6"/></linearGradient></defs><rect width="512" height="512" rx="96" fill="#FAF9F6"/><text x="256" y="278" font-family="'Inter',sans-serif" font-weight="800" font-size="72" letter-spacing="-4" text-anchor="middle" fill="#1C1917">Rootcast</text><rect x="92" y="293" width="328" height="5" rx="2.5" fill="url(#rc-g2)"/><circle cx="191" cy="225" r="5" fill="#14B8A6"/><text x="256" y="340" font-family="monospace" font-size="13" letter-spacing="1.5" text-anchor="middle" fill="#0D9488" opacity="0.85">proof-of-attendance</text></svg>
+      </div>
+      <div class="score-card">
+        <div class="corner-tag">LIVE · DEVNET</div>
+        <div class="score-label">Presence Score</div>
+        <div class="score-val">847</div>
+        <div class="score-sub">vitalik.sol · 23 attestations</div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">Voting Power</div>
+        <div class="score-val">3.4×</div>
+        <div class="score-sub">Weighted by recent activity decay</div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">cNFTs Minted</div>
+        <div class="score-val">10,000</div>
+        <div class="score-sub">Cost: &lt;$1.00 via Bubblegum</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="problem">
+  <div class="problem-grid fade-in">
+    <div class="problem-text">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-h2">Token-weighted governance is <span>broken</span> by design.</h2>
+      <p>Most DAOs hand governance power to whoever holds the most tokens — a system that rewards capital accumulation, not community contribution. The loudest voices aren't the most engaged members; they're the wealthiest wallets.</p>
+      <p>Existing "proof-of-participation" solutions issue badges as off-chain trophies with zero governance weight. You show up, you get a PNG, and then someone with 10 million tokens outvotes your entire community. Participation becomes theater.</p>
+      <p>Meanwhile, Sybil attacks remain trivial. Without KYC or meaningful onboarding, one actor can spin up hundreds of wallets, collect badges freely, and dominate any vote. The communities that care most about integrity have no viable path to fair governance.</p>
+    </div>
+    <div class="problem-callouts fade-in">
+      <div class="problem-callout" data-num="01">
+        <h4>Plutocracy Masquerading as Democracy</h4>
+        <p>Token-gated voting concentrates power with VCs and early holders, not active participants who built the community.</p>
+      </div>
+      <div class="problem-callout" data-num="02">
+        <h4>Badges With No Teeth</h4>
+        <p>POAP and similar systems create engagement records that are entirely disconnected from decision-making power.</p>
+      </div>
+      <div class="problem-callout" data-num="03">
+        <h4>Sybil Attacks at Scale</h4>
+        <p>Without identity verification, fake wallets freely farm participation badges and corrupt governance outcomes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="solution">
+  <div class="solution-inner fade-in">
+    <div class="solution-text">
+      <div class="section-label">The Solution</div>
+      <h2 class="section-h2">Attendance becomes <span>authority.</span></h2>
+      <p>Rootcast wires on-chain attendance directly into governance weight. Every verified action — attending a Space, completing a bounty, being vouched by existing members — mints a compressed NFT via Metaplex Bubblegum and increments your non-transferable Presence Score stored in a Program Derived Address.</p>
+      <p>That Presence Score isn't cosmetic. Our Anchor-based governance program reads it directly when weighing votes. Recent participation counts more than old badges thanks to configurable decay curves set by community admins. Show up consistently, govern meaningfully.</p>
+      <p>Sybil resistance comes from a social vouching graph: three existing members with minimum Presence Scores must vouch for any new wallet, creating a network of accountability without KYC. Every score, every vote, every vouching record is fully auditable on-chain through Helius DAS.</p>
+    </div>
+    <div class="solution-diagram fade-in">
+      <div class="sol-step">
+        <div class="sol-icon">◆</div>
+        <div class="sol-info"><h4>Action Verified On-Chain</h4><p>Attending a Space or completing a bounty triggers a time-locked claim link. Wallet claims it, Bubblegum mints a cNFT attestation to the Merkle tree.</p></div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-icon">▲</div>
+        <div class="sol-info"><h4>Presence Score Updated in PDA</h4><p>The Anchor program increments your wallet's Presence Score in its Program Derived Address, applying the community's decay curve automatically.</p></div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-icon">●</div>
+        <div class="sol-info"><h4>Vouching Graph Validates Identity</h4><p>New members require three vouches from existing members with a minimum score, writing social graph edges as on-chain PDA records.</p></div>
+      </div>
+      <div class="sol-step">
+        <div class="sol-icon">★</div>
+        <div class="sol-info"><h4>Weighted Vote Cast</h4><p>When governance proposals open, your Presence Score directly multiplies your vote weight. High-participation members shape outcomes proportionally.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="section-label fade-in">Features</div>
+  <h2 class="section-h2 fade-in">Built for communities that <span>mean it.</span></h2>
+  <div class="features-grid fade-in">
+    <div class="feat-card">
+      <span class="feat-icon">🌿</span>
+      <div class="feat-title">Compressed NFT Attestations</div>
+      <div class="feat-desc">Metaplex Bubblegum issues 10,000 engagement proofs for under $1 using Solana state compression. Per-action attestation is finally economically viable at any community scale.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">📊</span>
+      <div class="feat-title">Presence Score PDA</div>
+      <div class="feat-desc">Each wallet's non-transferable score lives in a Program Derived Address — fully on-chain, impossible to transfer or game, and readable by any program in the Solana ecosystem.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">⚖️</span>
+      <div class="feat-title">Anchor Governance Program</div>
+      <div class="feat-desc">Proposals, quorum thresholds, and vote finalization are handled by a Rust Anchor program that reads Presence Scores directly — no opaque backend, no admin override.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">⏳</span>
+      <div class="feat-title">Configurable Decay Curves</div>
+      <div class="feat-desc">Admins set decay parameters so recent participation outweighs stale badges. Consistent contributors maintain influence; inactive wallets see their weight fade over time.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">🔗</span>
+      <div class="feat-title">Social Vouching Graph</div>
+      <div class="feat-desc">Three existing members with minimum Presence Scores vouch for new wallets, writing Sybil-resistant social edges as on-chain PDA records — no KYC required.</div>
+    </div>
+    <div class="feat-card">
+      <span class="feat-icon">🔍</span>
+      <div class="feat-title">Full Helius DAS Auditability</div>
+      <div class="feat-desc">Every attestation, score update, and vote is indexed by Helius DAS and publicly queryable. Any community member can verify any outcome without trusting a backend.</div>
+    </div>
+  </div>
+</section>
+
+<section id="how-it-works">
+  <div class="section-label fade-in">How It Works</div>
+  <h2 class="section-h2 fade-in">From attendance to <span>governance</span> in four steps.</h2>
+  <div class="hiw-grid fade-in">
+    <div class="hiw-step">
+      <div class="hiw-num">01</div>
+      <div class="hiw-tag">Community Admin</div>
+      <h3>Configure Your Community</h3>
+      <p>Admins define event types, set Presence Score decay curves, configure quorum thresholds, and establish minimum vouching scores — all through the Next.js UI with zero Rust required. Parameters are written to the Anchor program on-chain.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-num">02</div>
+      <div class="hiw-tag">Member Action</div>
+      <h3>Participate & Claim Attestations</h3>
+      <p>Members attend Spaces, complete bounties, or get vouched by peers. Each action generates a time-locked claim link. Members connect their wallet, claim the cNFT, and their Presence Score increments automatically on-chain.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-num">03</div>
+      <div class="hiw-tag">Sybil Resistance</div>
+      <h3>Build Your Vouching Graph</h3>
+      <p>New community members need three vouches from existing members who've crossed the minimum Presence Score threshold. Each vouch writes a social graph edge to a PDA, creating an accountable web of on-chain identity.</p>
+    </div>
+    <div class="hiw-step">
+      <div class="hiw-num">04</div>
+      <div class="hiw-tag">Governance</div>
+      <h3>Vote With Earned Weight</h3>
+      <p>When proposals go live, the Anchor governance program tallies votes weighted by each wallet's Presence Score. Results finalize on-chain, Dialect sends notifications, and every outcome is publicly auditable via Helius DAS.</p>
+    </div>
+  </div>
+</section>
+
+<section id="metrics">
+  <div class="section-label fade-in">By The Numbers</div>
+  <h2 class="section-h2 fade-in">Economics that make <span>per-action attestation</span> real.</h2>
+  <div class="metrics-grid fade-in">
+    <div class="metric-card">
+      <div class="metric-val">&lt;<span class="metric-unit">$1</span></div>
+      <div class="metric-label">To mint 10,000 cNFT engagement proofs via Bubblegum state compression</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">3<span class="metric-unit">×</span></div>
+      <div class="metric-label">Solana builder communities in closed beta launching Q2 2026 on mainnet</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">20<span class="metric-unit">+</span></div>
+      <div class="metric-label">Active communities targeted for Q3 2026 with measurable governance participation</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-val">100<span class="metric-unit">%</span></div>
+      <div class="metric-label">On-chain auditability — every score, vote, and vouch verifiable via Helius DAS</div>
+    </div>
+  </div>
+</section>
+
+<section id="tech">
+  <div class="section-label fade-in">Tech Stack</div>
+  <h2 class="section-h2 fade-in">Built on <span>proven</span> Solana primitives.</h2>
+  <div class="tech-pills fade-in">
+    <div class="tech-pill"><span>◆</span> Solana SPL Compression</div>
+    <div class="tech-pill"><span>◆</span> Metaplex Bubblegum</div>
+    <div class="tech-pill"><span>◆</span> Anchor Framework (Rust)</div>
+    <div class="tech-pill"><span>◆</span> Program Derived Addresses</div>
+    <div class="tech-pill"><span>◆</span> Helius DAS API</div>
+    <div class="tech-pill"><span>◆</span> Next.js 14</div>
+    <div class="tech-pill"><span>◆</span> @solana/wallet-adapter-react</div>
+    <div class="tech-pill"><span>◆</span> Dialect SDK</div>
+  </div>
+  <p class="tech-note fade-in">Rootcast runs on battle-tested Solana infrastructure. State compression makes attestation economically trivial. Anchor ensures governance logic is auditable Rust. Helius makes every compressed NFT queryable. No custom L2, no opaque middleware — just composable on-chain primitives.</p>
+</section>
+
+<section id="cta">
+  <div class="cta-inner fade-in">
+    <div>
+      <h2 class="section-h2">Your community deserves governance that <em>reflects</em> who showed up.</h2>
+      <p>Join the closed beta launching Q2 2026 with three Solana builder communities on mainnet. Be among the first to issue Presence Scores and run on-chain attendance-weighted governance.</p>
+    </div>
+    <div>
+      <form class="email-form" onsubmit="return false">
+        <input type="email" placeholder="your@wallet.sol or email address" />
+        <button type="submit" class="btn-white">Request Beta Access →</button>
+        <span class="email-note">No spam. Just a heads-up when mainnet beta opens. Unsubscribe anytime.</span>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Rootcast. All rights reserved.</span>
+  <div class="social-links">
+    <a href="#" class="social-link" title="Twitter/X">𝕏</a>
+    <a href="#" class="social-link" title="GitHub">⌥</a>
+    <a href="#" class="social-link" title="Discord">◈</a>
+    <a href="#" class="social-link" title="Telegram">✈</a>
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.1});
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
