@@ -1,0 +1,124 @@
+{
+  "_meta": {
+    "schema_version": "1.0",
+    "source": "startup_generator",
+    "generated_from": "output/projects/Rootcast/profile.json",
+    "notes": "Field names and values match Surge Discovery create form (Full Mode, 9 steps)"
+  },
+  "project_name": "Rootcast",
+  "tagline": "Proof-of-attendance communities on Solana — where showing up earns you governance, not just a badge.",
+  "full_description": "Rootcast issues compressed NFTs via Metaplex Bubblegum as on-chain attestations for verifiable community actions — attending a Space, completing a bounty, or being vouched by existing members. Each wallet accumulates a non-transferable Presence Score stored in a Program Derived Address, and that score directly weights votes in an Anchor-based on-chain governance program. Because Solana state compression makes minting 10,000 engagement proofs cost under $1, per-action attestation is economically",
+  "category": "AI Agents & Automation",
+  "stage": "Prototype",
+  "logo": {
+    "local_path": "/Users/aliev_murat/Documents/Claude/Projects/SURGE/startup-generator/output/logos/Rootcast.svg",
+    "url": "",
+    "format": "svg",
+    "note": "Surge requires PNG or JPG. Convert SVG → PNG before upload."
+  },
+  "ai_tools": [
+    "Cursor",
+    "Claude Code",
+    "Cline"
+  ],
+  "tech_stack": {
+    "languages": [
+      "TypeScript"
+    ],
+    "dev_tools": [
+      "Solana SPL Compression (state compression)",
+      "Metaplex Bubblegum (cNFT minting)",
+      "Anchor framework (Rust, on-chain voting program)",
+      "Program Derived Addresses (PDA Presence Score ledger)",
+      "Helius DAS API (compressed NFT indexing and querying)",
+      "Next.js 14 (frontend)",
+      "@solana/wallet-adapter-react (wallet connection)",
+      "Dialect SDK (on-chain governance notifications)",
+      "PostgreSQL (off-chain event metadata cache)"
+    ]
+  },
+  "pitch_deck": {
+    "local_path": "/Users/aliev_murat/Documents/Claude/Projects/SURGE/startup-generator/output/decks/Rootcast_deck.pptx",
+    "url": "",
+    "format": "pptx",
+    "note": "Surge requires PDF. Convert PPTX → PDF before upload."
+  },
+  "whitepaper": {
+    "local_path": "",
+    "url": ""
+  },
+  "pitch_video": {
+    "url": "",
+    "source": "youtube",
+    "note": "Must be public/unlisted YouTube URL. Max 800 seconds."
+  },
+  "links": {
+    "website": "https://AllievMuro.github.io/rootcast",
+    "github": "https://github.com/AllievMuro/rootcast",
+    "telegram": "",
+    "x_twitter": ""
+  },
+  "team_description": "The team consists of two Solana protocol engineers with prior experience shipping Anchor programs and SPL token tooling, and one frontend engineer who has built wallet-adapter integrations for two live Solana dApps. The founders previously contributed to a Solana-native DAO tooling project and have direct relationships with several mid-size builder collectives looking for contribution-weighted governance.",
+  "team_members": [],
+  "roadmap": [
+    {
+      "quarter": "Q1 2026",
+      "status": "Completed",
+      "goal": "Deploy core Anchor programs and cNFT issuance pipeline on Solana devnet with a functional prototype",
+      "deliverables": [
+        "Anchor-based Presence Score PDA program deployed to devnet with configurable decay logic and unit tests",
+        "Bubblegum cNFT minting flow for time-locked event claim links, tested end-to-end with Helius DAS API indexing",
+        "Next.js prototype UI supporting wallet connection, event creation, cNFT claiming, and Presence Score display"
+      ]
+    },
+    {
+      "quarter": "Q2 2026",
+      "status": "In Progress",
+      "goal": "Launch closed beta with three Solana builder communities on mainnet and ship on-chain governance voting",
+      "deliverables": [
+        "Anchor governance program deployed to mainnet supporting Presence Score-weighted proposals, quorum thresholds, and vote finalization",
+        "Vouching graph feature live — three-member vouching flow with minimum Presence Score gate and on-chain social graph PDA records",
+        "Public community leaderboard with auditable on-chain proof links, integrated with Dialect notifications for governance alerts"
+      ]
+    },
+    {
+      "quarter": "Q3 2026",
+      "status": "Upcoming",
+      "goal": "Open self-serve community onboarding and reach 20 active communities with measurable governance participation",
+      "deliverables": [
+        "Self-serve community setup wizard allowing admins to configure event types, decay curves, and voting formulas without writing code",
+        "Analytics dashboard showing per-community participation rates, Presence Score distribution, and proposal turnout over time",
+        "SDK and REST API wrapper over Helius DAS for third-party integrations, enabling Discord bots and external tools to read Presence Scores"
+      ]
+    }
+  ],
+  "revenue_sources": {
+    "stripe": null,
+    "paypal": null,
+    "shopify": null
+  },
+  "user_data": {
+    "google_analytics": null,
+    "mixpanel": null
+  },
+  "publish_readiness": {
+    "required": {
+      "logo": true,
+      "project_name": true,
+      "tagline": true,
+      "category": true,
+      "full_description": true,
+      "team": true,
+      "pitch_deck": true,
+      "pitch_video": false
+    },
+    "optional": {
+      "tech_stack": true,
+      "roadmap": true,
+      "socials": true,
+      "revenue_sources": false,
+      "user_data": false
+    },
+    "summary": "Required: 7/8, Optional: 3/5"
+  }
+}
